@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 st.title("반도체 공정 시뮬레이터")
 
 st.sidebar.header("공정 조건 선택")
-process = st.sidebar.selectbox("공정 선택"["산화","식각","증착"])
+process = st.sidebar.selectbox("공정 선택",["산화","식각","증착"])
 temp = st.sidebar.slider("온도(°C)", 200, 1000, 600)
 time = st.sidebar.slider("공정 시간(분)", 1, 120, 30)
 
