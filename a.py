@@ -8,7 +8,7 @@ process = st.sidebar.selectbox("공정 선택"["산화","식각","증착"])
 temp = st.sidebar.slider("온도(°C)", 200, 1000, 600)
 time = st.sidebar.slider("공정 시간(분)", 1, 120, 30)
 
-st.write(f"선택한 공정: **(process}**, 온도: {temp}°C, 시간: {time}분")
+st.write(f"선택한 공정: **{process}**, 온도: {temp}°C, 시간: {time}분")
 
 #산화 시뮬레이션
 if process=="산화":
