@@ -18,37 +18,34 @@ process = "산화"
 time = st.number_input("Time (min)", min_value=0.0, value=60.0)
 temp = st.number_input("Temperature (°C)", min_value=800, value=1000)
 
+process = "산화"
+time = st.number_input("Time (min)", min_value=0.0, value=60.0)
+temp = st.number_input("Temperature (°C)", min_value=800.0, value=1000.0)
+
 if process == "산화":
-    # 온도에 따른 A, B 설정 (Dry O2 @1000°C 기준, 고정값)
+    # A, B 값 설정 (예: Dry O2 at 1000°C 기준)
     A = 0.1       # μm
     B = 0.0117    # μm²/min
 
-    # Deal-Grove 수식
-    oxide_thickness_um = (-A + (A**2 + 4 * B * time)**0.5) / 2
-    thickness = oxide_thickness_um * 1000  # nm
+    # 시간 배열 만들기 (0부터 time까지 100개 점)
+    times = np.linspace(0, time, 100)
 
-    st.write(f"예상 산화막 두께: **{round(thickness, 2)} nm**")
+    # 각 시간에 대한 산화막 두께 계산
+    thicknesses = [(-A + np.sqrt(A**2 + 4 * B * t_i)) / 2 * 1000 for t_i in times]  # nm
 
-    # 그래프 출력
+    # 마지막 시간의 두께 출력
+    final_thickness = thicknesses[-1]
+    st.write(f"예상 산화막 두께: **{round(final_thickness, 2)} nm**")
+
+    # 곡선 그래프 그리기
     fig, ax = plt.subplots()
-    ax.plot([0, time], [0, thickness])
+    ax.plot(times, thicknesses, label="Oxide Thickness")
     ax.set_xlabel("Time (min)")
     ax.set_ylabel("Oxide Thickness (nm)")
-    ax.set_title("Change in Oxide Thickness")
+    ax.set_title("Change in Oxide Thickness (Deal-Grove Model)")
+    ax.grid(True)
+    ax.legend()
     st.pyplot(fig)
-
-#식각 시뮬레이션
-elif process == "식각":
- etch_rate= 0.05*(temp/100) # 단위: nm/min
- etched_thickness = etch_rate* time
- st.write(f"예상 제거된 두께: **{round(etched_thickness, 2)} nm**")
- 
- fig, ax= plt.subplots()
- ax.plot([0, time], [0, etched_thickness])
- ax.set_xlabel("Time (min)")
- ax.set_ylabel("Etched Thickness (nm)") 
- ax.set_title("Change in Etched Thickness")
- st.pyplot(fig)
   
 #증착 시뮬레이션
 elif process == "증착":
