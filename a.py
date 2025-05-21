@@ -26,7 +26,7 @@ if process=="산화":
 elif process == "식각":
  etch_rate= 0.05*(temp/100) # 단위: nm/min
  etched_thickness = etch_rate* time
- st.write(f"예상 제거된 두께: **(round(etched_thickness, 2)} nm**")
+ st.write(f"예상 제거된 두께: **{round(etched_thickness, 2)} nm**")
  
  fig, ax= plt.subplots()
  ax.plot([0, time], [0, etched_thickness])
