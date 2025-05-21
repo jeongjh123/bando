@@ -42,8 +42,10 @@ elif process == "증착":
  st.write(f"예상 증착막 두께: **{round(deposited_thickness, 2)} nm**")
  
  fig, ax = plt.subplots()
- ax.plot([0, time], [0, deposited_thickness]) ax.set_xlabel("Time (min)")
- ax.set_ylabel("Deposited Thickness (nm)") ax.set_title("Change in Deposited Thickness")
+ ax.plot([0, time], [0, deposited_thickness]) 
+ ax.set_xlabel("Time (min)")
+ ax.set_ylabel("Deposited Thickness (nm)") 
+ ax.set_title("Change in Deposited Thickness")
  st.pyplot(fig)
 
 #이론 설명
