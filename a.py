@@ -10,17 +10,32 @@ time = st.sidebar.slider("공정 시간(분)", 1, 120, 30)
 
 st.write(f"선택한 공정: **{process}**, 온도: {temp}°C, 시간: {time}분")
 
-#산화 시뮬레이션
-if process=="산화":
- thickness = 0.1* (temp/ 100)* (time ** 0.5)
- st.write(f"예상 산화막 두께: **{round (thickness, 2)} nm**")
- 
- fig, ax = plt.subplots()
- ax.plot([0, time], [0, thickness])
- ax.set_xlabel("Time (min)")
- ax.set_ylabel("Oxide Thickness (nm)")
- ax.set_title("Change in Oxide Thickness") 
- st.pyplot(fig)
+import streamlit as st
+import matplotlib.pyplot as plt
+
+# 예시 변수 입력 (실제로는 st.slider 또는 st.number_input 등으로 받아야 함)
+process = "산화"
+time = st.number_input("Time (min)", min_value=0.0, value=60.0)
+temp = st.number_input("Temperature (°C)", min_value=800, value=1000)
+
+if process == "산화":
+    # 온도에 따른 A, B 설정 (Dry O2 @1000°C 기준, 고정값)
+    A = 0.1       # μm
+    B = 0.0117    # μm²/min
+
+    # Deal-Grove 수식
+    oxide_thickness_um = (-A + (A**2 + 4 * B * time)**0.5) / 2
+    thickness = oxide_thickness_um * 1000  # nm
+
+    st.write(f"예상 산화막 두께: **{round(thickness, 2)} nm**")
+
+    # 그래프 출력
+    fig, ax = plt.subplots()
+    ax.plot([0, time], [0, thickness])
+    ax.set_xlabel("Time (min)")
+    ax.set_ylabel("Oxide Thickness (nm)")
+    ax.set_title("Change in Oxide Thickness")
+    st.pyplot(fig)
 
 #식각 시뮬레이션
 elif process == "식각":
