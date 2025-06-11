@@ -21,7 +21,7 @@ times = np.linspace(0, time, 100)
 
 # ---- 공정별 모델 ----
 if process == "산화":
-    st.subheader("oxide thickness determination")
+    st.subheader("oxide thickness")
 
     A = 0.1       # μm
     B = 0.0117    # μm²/min
@@ -29,7 +29,7 @@ if process == "산화":
     # Deal-Grove 모델
     thickness_deal_grove = [(-A + np.sqrt(A**2 + 4 * B * t)) / 2 * 1000 for t in times]  # nm
 
-    if model_type == "이론적":
+    if model_type == "Theoretical":
         thickness = thickness_deal_grove
     else:
         # 현실적 모델: 포화형 (exponential saturation)
@@ -44,7 +44,7 @@ if process == "산화":
     fig, ax = plt.subplots()
     ax.plot(times, thickness, label=model_type, color='green')
     if model_type != "이론적":
-        ax.plot(times, thickness_deal_grove, '--', label="이론적(Deal-Grove)", color='gray')
+        ax.plot(times, thickness_deal_grove, '--', label="Theoretical(Deal-Grove)", color='gray')
     ax.set_xlabel("Time (min)")
     ax.set_ylabel("Oxide Thickness (nm)")
     ax.set_title("산화막 두께 변화")
@@ -53,12 +53,12 @@ if process == "산화":
     st.pyplot(fig)
 
 elif process == "증착":
-    st.subheader("증착막 두께 시뮬레이션")
+    st.subheader("Deposition Thickness")
 
     deposition_rate = 0.08 * (temp / 100)  # nm/min
     thickness_linear = deposition_rate * times
 
-    if model_type == "이론적":
+    if model_type == "Theoretical":
         thickness = thickness_linear
     else:
         # 현실적: 초기 빠르다가 포화되는 모델 (예: 공급 제한형)
@@ -71,7 +71,7 @@ elif process == "증착":
     fig, ax = plt.subplots()
     ax.plot(times, thickness, label=model_type, color='blue')
     if model_type != "이론적":
-        ax.plot(times, thickness_linear, '--', label="이론적", color='gray')
+        ax.plot(times, thickness_linear, '--', label="Theoretical", color='gray')
     ax.set_xlabel("Time (min)")
     ax.set_ylabel("Deposited Thickness (nm)")
     ax.set_title("증착막 두께 변화")
@@ -80,7 +80,7 @@ elif process == "증착":
     st.pyplot(fig)
 
 elif process == "식각":
-    st.subheader("식각 깊이 시뮬레이션")
+    st.subheader("Etch Depth")
 
     etch_rate = 0.05 * (temp / 100)  # nm/min
     depth_linear = etch_rate * times
@@ -96,8 +96,8 @@ elif process == "식각":
 
     fig, ax = plt.subplots()
     ax.plot(times, depth, label=model_type, color='red')
-    if model_type != "이론적":
-        ax.plot(times, depth_linear, '--', label="이론적", color='gray')
+    if model_type != "Theoretical":
+        ax.plot(times, depth_linear, '--', label="Theoretical", color='gray')
     ax.set_xlabel("Time (min)")
     ax.set_ylabel("Etched Depth (nm)")
     ax.set_title("식각 깊이 변화")
