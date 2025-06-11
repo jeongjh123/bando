@@ -38,12 +38,12 @@ if process == "산화":
         thickness = saturation_thickness * (1 - np.exp(-rate * times))
 
     # 결과 출력
-    st.write(f"예상 산화막 두께: **{round(thickness[-1], 2)} nm**")
+    st.write(f"	Estimated Oxide Thickness: **{round(thickness[-1], 2)} nm**")
 
     # 그래프
     fig, ax = plt.subplots()
     ax.plot(times, thickness, label=model_type, color='green')
-    if model_type != "이론적":
+    if model_type != "Theoretical":
         ax.plot(times, thickness_deal_grove, '--', label="Theoretical(Deal-Grove)", color='gray')
     ax.set_xlabel("Time (min)")
     ax.set_ylabel("Oxide Thickness (nm)")
@@ -66,11 +66,11 @@ elif process == "증착":
         rate = 0.03
         thickness = max_thickness * (1 - np.exp(-rate * times))
 
-    st.write(f"예상 증착막 두께: **{round(thickness[-1], 2)} nm**")
+    st.write(f"	Estimated Deposition Thickness: **{round(thickness[-1], 2)} nm**")
 
     fig, ax = plt.subplots()
     ax.plot(times, thickness, label=model_type, color='blue')
-    if model_type != "이론적":
+    if model_type != "Theoretical":
         ax.plot(times, thickness_linear, '--', label="Theoretical", color='gray')
     ax.set_xlabel("Time (min)")
     ax.set_ylabel("Deposited Thickness (nm)")
@@ -85,14 +85,14 @@ elif process == "식각":
     etch_rate = 0.05 * (temp / 100)  # nm/min
     depth_linear = etch_rate * times
 
-    if model_type == "이론적":
+    if model_type == "Theoretical":
         depth = depth_linear
     else:
         # 현실적: 반응 부산물/농도 감소 고려한 속도 감소형 모델
         decay_rate = 0.03
         depth = (etch_rate / decay_rate) * (1 - np.exp(-decay_rate * times))
 
-    st.write(f"예상 식각 깊이: **{round(depth[-1], 2)} nm**")
+    st.write(f"Estimated Etch Depth: **{round(depth[-1], 2)} nm**")
 
     fig, ax = plt.subplots()
     ax.plot(times, depth, label=model_type, color='red')
