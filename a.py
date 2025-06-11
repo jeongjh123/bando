@@ -42,7 +42,7 @@ if process == "산화":
 
     # 그래프
     fig, ax = plt.subplots()
-    ax.plot(times, thickness, label=model_type, color='green')
+    ax.plot(times, thickness, label="oxidation", color='green')
     if model_type != "Theoretical":
         ax.plot(times, thickness_deal_grove, '--', label="Theoretical(Deal-Grove)", color='gray')
     ax.set_xlabel("Time (min)")
