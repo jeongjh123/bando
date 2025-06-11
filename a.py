@@ -23,8 +23,10 @@ times = np.linspace(0, time, 100)
 if process == "산화":
     st.subheader("Oxide Thickness")
 
-    A = 0.1       # μm
-    B = 0.0117    # μm²/min
+    A0 = 0.1  # μm at 600°C
+    B0 = 0.0117  # μm²/min at 600°C
+    A = A0 * (temp / 600)
+    B = B0 * (temp / 600)
 
     # Deal-Grove 모델
     thickness_deal_grove = [(-A + np.sqrt(A**2 + 4 * B * t)) / 2 * 1000 for t in times]  # nm
