@@ -21,7 +21,7 @@ times = np.linspace(0, time, 100)
 
 # ---- 공정별 모델 ----
 if process == "산화":
-    st.subheader("oxide thickness")
+    st.subheader("Oxide Thickness")
 
     A = 0.1       # μm
     B = 0.0117    # μm²/min
@@ -29,7 +29,7 @@ if process == "산화":
     # Deal-Grove 모델
     thickness_deal_grove = [(-A + np.sqrt(A**2 + 4 * B * t)) / 2 * 1000 for t in times]  # nm
 
-    if model_type == "Theoretical":
+    if model_type == "이론적":
         thickness = thickness_deal_grove
     else:
         # 현실적 모델: 포화형 (exponential saturation)
@@ -38,13 +38,15 @@ if process == "산화":
         thickness = saturation_thickness * (1 - np.exp(-rate * times))
 
     # 결과 출력
-    st.write(f"	Estimated Oxide Thickness: **{round(thickness[-1], 2)} nm**")
+    st.write(f"Estimated Oxide Thickness: **{round(thickness[-1], 2)} nm**")
 
     # 그래프
     fig, ax = plt.subplots()
-    ax.plot(times, thickness, label="exponential saturation", color='green')
-    if model_type != "Theoretical":
-        ax.plot(times, thickness_deal_grove, '--', label="Theoretical(Deal-Grove)", color='gray')
+    if model_type == "이론적":
+        ax.plot(times, thickness, label="Theoretical Model", color='green')
+    else:
+        ax.plot(times, thickness, label="Exponential Saturation Model", color='green')
+        ax.plot(times, thickness_deal_grove, '--', label="Theoretical Deal-Grove Model", color='gray')
     ax.set_xlabel("Time (min)")
     ax.set_ylabel("Oxide Thickness (nm)")
     ax.set_title("Change in Oxide Thickness")
@@ -58,7 +60,7 @@ elif process == "증착":
     deposition_rate = 0.08 * (temp / 100)  # nm/min
     thickness_linear = deposition_rate * times
 
-    if model_type == "Theoretical":
+    if model_type == "이론적":
         thickness = thickness_linear
     else:
         # 현실적: 초기 빠르다가 포화되는 모델 (예: 공급 제한형)
@@ -66,12 +68,14 @@ elif process == "증착":
         rate = 0.03
         thickness = max_thickness * (1 - np.exp(-rate * times))
 
-    st.write(f"	Estimated Deposition Thickness: **{round(thickness[-1], 2)} nm**")
+    st.write(f"Estimated Deposition Thickness: **{round(thickness[-1], 2)} nm**")
 
     fig, ax = plt.subplots()
-    ax.plot(times, thickness, label=model_type, color='blue')
-    if model_type != "Theoretical":
-        ax.plot(times, thickness_linear, '--', label="Theoretical", color='gray')
+    if model_type == "이론적":
+        ax.plot(times, thickness, label="Theoretical Model", color='blue')
+    else:
+        ax.plot(times, thickness, label="Exponential Saturation Model", color='blue')
+        ax.plot(times, thickness_linear, '--', label="Theoretical Model", color='gray')
     ax.set_xlabel("Time (min)")
     ax.set_ylabel("Deposited Thickness (nm)")
     ax.set_title("Change in Deposition Thickness")
@@ -85,7 +89,7 @@ elif process == "식각":
     etch_rate = 0.05 * (temp / 100)  # nm/min
     depth_linear = etch_rate * times
 
-    if model_type == "Theoretical":
+    if model_type == "이론적":
         depth = depth_linear
     else:
         # 현실적: 반응 부산물/농도 감소 고려한 속도 감소형 모델
@@ -95,9 +99,11 @@ elif process == "식각":
     st.write(f"Estimated Etch Depth: **{round(depth[-1], 2)} nm**")
 
     fig, ax = plt.subplots()
-    ax.plot(times, depth, label=model_type, color='red')
-    if model_type != "Theoretical":
-        ax.plot(times, depth_linear, '--', label="Theoretical", color='gray')
+    if model_type == "이론적":
+        ax.plot(times, depth, label="Theoretical Model", color='red')
+    else:
+        ax.plot(times, depth, label="Decay Saturation Model", color='red')
+        ax.plot(times, depth_linear, '--', label="Theoretical Model", color='gray')
     ax.set_xlabel("Time (min)")
     ax.set_ylabel("Etched Depth (nm)")
     ax.set_title("Change in Etch Depth")
@@ -126,4 +132,3 @@ with st.expander("공정 이론 설명"):
         - 이론적으로는 일정한 속도이지만,  
         - 현실에서는 반응물 농도 감소나 표면 반응 포화로 증착률이 줄어들기도 합니다.
         """)
-
